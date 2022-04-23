@@ -1,24 +1,43 @@
 # savage_admin
 
-## Project setup
-```
-yarn install
-```
+从0到1搭建一个完善的中后台管理系统
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
 
-### Compiles and minifies for production
-```
-yarn build
-```
+## 菜单和路由
 
-### Lints and fixes files
-```
-yarn lint
-```
+一般的处理时，菜单和路由分别写，这样子每次修改过于繁琐，市面上的处理，通过路由生成菜单，一级路由都会要写一个layout组件，所以会出现，二级菜单里面只有一个子菜单项，需要另外的处理只有一个子菜单项就替代一级菜单显示，不优雅。
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+我的设计
+
+```typescript
+  {
+    path: "/dashboard",
+    name: "dashboard",
+    component: () => import("@/pages/dashboard/index.vue"),
+    meta: {
+      title: "仪表盘", // 页面的菜单的名字
+      roles: ['admin'], // 该路由需要的权限
+      isHidden: false, // 是否隐藏，默认判断为 false
+      isMenuRoute: true, // 该路由是否菜单路由，默认为 true
+  },
+  ```
+
+因为菜单的layout是动态添加的，所以需要处理所有的路由。在目录划分上不需要划分出静态路由和动态路由。
+
+在项目启动的时候，将会注入所有添加layou组件的路由，为了保持首次打开或者刷新的正常路由跳转，然后在初始化路由的时候，清空路由，再注入所有鉴权后的路由。
+
+清空路由时因为首次访问注入了所有路由，为了防止没有权限的用户访问页面，需要清空路由，再注入鉴权后的路由。
+
+在处理菜单的时候，有以下思路：
+- 先根据用户权限过滤路由
+- 根据 isMenuRoute 和 isHidden 过滤出非隐藏菜单路由，保持原有的数据结构，用于递归生成菜单
+- 根据 isMenuRoute 过滤出菜单路由和非菜单路由，将菜单路由扁平化处理，然后添加layout组件
+- 清空路由，将菜单路由和非菜单路由注入路由
+
+
+### 路由鉴权
+
+路由记录没有设置 `meta` 或 `meta.roles` 或 `meta.roles是空数组`的，表示该路由不需要权限控制。
+
+否则，遍历用户roles，然后判断路由记录的`meta.roles`是否包含`role`，包含就表示有权限。

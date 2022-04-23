@@ -1,5 +1,17 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from 'vue';
+import App from './App.vue';
 
-createApp(App).use(router).mount('#app')
+import 'element-plus/dist/index.css';
+import 'normalize.css/normalize.css';
+
+import setupRouter from '@/router';
+import setupPinia from '@/store'
+
+const app = createApp(App);
+
+setupRouter(app);
+setupPinia(app);
+
+// 必须在最后一行
+app.mount('#app');
+
