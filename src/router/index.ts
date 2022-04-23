@@ -11,7 +11,6 @@ import { getCanInjectRoutes } from './utils'
 export const router = createRouter({
   history: createWebHashHistory(),
   // 因为动态添加layout组件，首次路由跳转会警告报错，处理思路：首次使用所有添加layout的组件，保持打开的正常跳转，然后初始化路由的时候，清空路由，注入鉴权后的路由。
-  // 注意：这里要注意路由顺序，非路由菜单的路由必须在前才能正常重定向后面的菜单路由
   routes: getCanInjectRoutes(routes),
 });
 

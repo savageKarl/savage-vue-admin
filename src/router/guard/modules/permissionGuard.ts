@@ -1,6 +1,6 @@
 import type { Router } from "vue-router";
 
-import { useMenuRouteStore } from "@/store/modules/MenuRoute";
+import { useMenuRouteStore } from "@/store/modules/menuRoute";
 import { useUserStore } from "@/store/modules/user";
 import { initRoutes } from "@/router/utils";
 

@@ -1,8 +1,9 @@
 import type { RouteRecordRaw } from "vue-router";
 import { router } from "@/router";
 import { routes } from "@/router/routes";
-import { useMenuRouteStore } from "@/store/modules/MenuRoute";
+import { useMenuRouteStore } from "@/store/modules/menuRoute";
 import { useUserStore } from "@/store/modules/user";
+
 // 在这里根据用户角色初始化路由
 export function initRoutes() {
   const allRoutes = routes;
@@ -24,6 +25,7 @@ export function getCanInjectRoutes(routes: RouteRecordRaw[]) {
   const falttendMenuRoutes = flattenMenuRoutes(menuRoutes);
   const layoutMenuRoutes = addLayoutToMenuRoute(falttendMenuRoutes);
   const notMenuRoutes = getNotMenuRoutes(routes);
+  // 注意：这里要注意路由顺序，非路由菜单的路由必须在前才能正常重定向后面的菜单路由
   return [...notMenuRoutes, ...layoutMenuRoutes];
 }
 

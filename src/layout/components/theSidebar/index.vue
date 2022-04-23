@@ -6,7 +6,7 @@ import menuItem from './menuItem/index.vue';
 
 import { useAppStore } from '@/store/modules/app';
 
-import { useMenuRouteStore } from '@/store/modules/MenuRoute';
+import { useMenuRouteStore } from '@/store/modules/menuRoute';
 
 import {
   Document,
@@ -34,7 +34,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 <template>
   <!-- 侧边栏的宽度暂时先这样子定200px，到时候整个单独的样式文件来设置宽度，以及选中和激活的样式 -->
 
-  <el-aside width="200px" :class="{ 'collapseSideBar': isCollapse }">
+  <el-aside width="200px" :class="{'collapseSideBar': isCollapse}">
     <el-scrollbar>
       <logo :collapse="isCollapse"></logo>
       <el-menu :default-active="$router.currentRoute.value.path" :collapse="isCollapse" unique-opened @open="handleOpen"
@@ -50,7 +50,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 }
 
 .collapseSideBar {
-  width: 56px;
+  width: 64px;
 
   & span {
     color: red;

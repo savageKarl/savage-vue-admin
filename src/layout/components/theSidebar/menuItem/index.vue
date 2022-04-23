@@ -17,22 +17,25 @@ defineProps<{
 
 
 <template>
-  <div>
-    <template v-if="!item.children">
-      <el-menu-item :index="item.path">{{ item.meta?.title }}</el-menu-item>
-    </template>
-    <template v-else>
-      <el-sub-menu :index="item.path">
-        <template #title>
-          <el-icon>
-            <location />
-          </el-icon>
-          <span>{{ item.meta?.title }}</span>
-        </template>
-        <index v-for="(itemSub, index) in item.children" :key="index" :item="itemSub"></index>
-      </el-sub-menu>
-    </template>
-  </div>
+  <template v-if="!item.children">
+    <el-menu-item :index="item.path">
+      <el-icon>
+        <location />
+      </el-icon>
+      <template #title>{{ item.meta?.title }}</template>
+    </el-menu-item>
+  </template>
+  <template v-else>
+    <el-sub-menu :index="item.path">
+      <template #title>
+        <el-icon>
+          <location />
+        </el-icon>
+        <span>{{ item.meta?.title }}</span>
+      </template>
+      <index v-for="(itemSub, index) in item.children" :key="index" :item="itemSub"></index>
+    </el-sub-menu>
+  </template>
 </template>
 
 <style scoped>
