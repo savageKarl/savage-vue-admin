@@ -4,6 +4,7 @@ export const editor: RouteRecordRaw[] = [
   {
     path: "/editor",
     redirect: "/editor/markdown",
+    name: 'editor',
     meta: {
       title: "编辑器",
       roles: ["admin"],

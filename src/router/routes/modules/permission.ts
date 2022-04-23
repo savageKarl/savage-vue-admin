@@ -7,6 +7,7 @@ export const permission: RouteRecordRaw[] = [
     component: () => import("@/pages/permission/index.vue"),
     meta: {
       title: "权限控制",
+      roles: ['editor']
     },
   },
 ];

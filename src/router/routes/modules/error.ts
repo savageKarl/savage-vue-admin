@@ -4,6 +4,7 @@ export const error: RouteRecordRaw[] = [
   {
     path: "/error",
     redirect: "/error/401",
+    name: "error",
     meta: {
       title: "错误处理",
       roles: ["admin"],
@@ -29,4 +30,21 @@ export const error: RouteRecordRaw[] = [
       },
     ],
   },
-] 
+  {
+    path: "/404",
+    name: "404",
+    component: () => import("@/pages/errorPage/404/index.vue"),
+    meta: {
+      isMenuRoute: false,
+    },
+  },
+  {
+    // 匹配找不到的路由，path 和 name不能改，改了会失效，
+    path: "/:pathMatch(.*)*",
+    name: "not-found",
+    redirect: "/404",
+    meta: {
+      isMenuRoute: false,
+    },
+  },
+];
