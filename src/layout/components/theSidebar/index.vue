@@ -36,7 +36,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 
   <el-aside width="200px" :class="{'collapseSideBar': isCollapse}">
     <el-scrollbar>
-      <logo :collapse="isCollapse"></logo>
+      <!-- <logo :collapse="isCollapse"></logo> -->
       <el-menu :default-active="$router.currentRoute.value.path" :collapse="isCollapse" unique-opened @open="handleOpen"
         @close="handleClose" router>
         <menu-item v-for="(item, index) in menuRoutes" :item="item" :key="index"></menu-item>

@@ -1,30 +1,15 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useAppStore } from '@/store/modules/app';
-
-import { Fold, Expand } from '@element-plus/icons-vue';
-
-const appStore = useAppStore();
-
-const isCollapse = computed(() => appStore.isCollapseSideBar);
-function toggleCollapseSidebar() {
-  appStore.toggleCollapseSidebar()
-}
-
+import collapseBtn from './components/collapseBtn/index.vue';
+import tabBar from './components/tabBar/index.vue';
 
 </script>
 
 <template>
   <el-header height="85px">
     <div class="navigationBar">
-      <div class="collapseBtn">
-        <el-icon :size="20" @click="appStore.toggleCollapseSidebar">
-          <expand v-if="isCollapse" />
-          <fold v-else />
-        </el-icon>
-      </div>
+      <collapseBtn />
     </div>
-    <div class="tabBar">tabBar</div>
+    <tabBar />
   </el-header>
 </template>
 
