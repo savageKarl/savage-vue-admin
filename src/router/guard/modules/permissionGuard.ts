@@ -5,7 +5,7 @@ import { useUserStore } from "@/store/modules/user";
 import { initRoutes } from "@/router/utils";
 
 export function setupPermissionGuard(router: Router) {
-  router.beforeEach((to) => {
+  router.beforeEach((to,from) => {
     const userStore = useUserStore();
     if (!userStore.token && to.name !== "login") {
       return "login";

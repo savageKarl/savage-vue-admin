@@ -7,7 +7,7 @@ const { ElementPlusResolver } = require('unplugin-vue-components/resolvers')
 module.exports = {
   devServer: {
     // 开发编译时自动浏览器
-    open: true,
+    open: true
   },
   configureWebpack: {
     plugins: [
