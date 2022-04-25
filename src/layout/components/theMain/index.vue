@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <el-main style="background-color: aquamarine;">
+  <el-main>
     <el-scrollbar>
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">

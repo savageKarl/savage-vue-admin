@@ -16,10 +16,14 @@ import tabBar from './components/tabBar/index.vue';
 
 
 <style lang="scss" scoped>
+.el-header {
+  padding: 0;
+}
 .navigationBar {
   height: 50px;
   display: flex;
   align-items: center;
+  padding: 0 20px;
 }
 
 .collapseBtn {
