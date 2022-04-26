@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore("user", {
   state: () => ({
     token: "",
+    name: '',
     roles: [] as string[],
   }),
   actions: {
@@ -12,6 +13,9 @@ export const useUserStore = defineStore("user", {
     setRoles(roles: string[]) {
       this.roles = roles;
     },
+    setName(name: string) {
+      this.name = name;
+    }
   },
   persist: {
     enabled: true,

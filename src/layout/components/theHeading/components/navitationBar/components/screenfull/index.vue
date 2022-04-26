@@ -28,6 +28,7 @@ const toggleFullScreen = () => {
 <style lang="scss">
   .screenfull {
     cursor: pointer;
+    margin: 0 5px;
   }
 </style>
 
