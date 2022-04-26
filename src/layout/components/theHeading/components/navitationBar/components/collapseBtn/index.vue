@@ -14,4 +14,7 @@ const appStore = useAppStore();
 </template>
 
 <style lang="scss">
+.collapseBtn {
+  cursor: pointer;
+}
 </style>
