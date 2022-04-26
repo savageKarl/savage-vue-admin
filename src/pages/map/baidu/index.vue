@@ -1,26 +1,73 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import { city } from '@/utils/map/city'
 
-let BMap: any;
-
-function loadScript() {
-  return new Promise<void>((resolve, reject) => {
-    var script = document.createElement("script");
-    script.src = "https://api.map.baidu.com/api?v=3.0&ak=qcxokzuhl8hvUbQuEfjQeqlBMF0dN9qm&callback=initialize";
-    document.body.appendChild(script);
-    script.onload = () => {
-      BMap = (window as any).BMap;
-      resolve();
-    };
-    script.onerror = reject;
+function loadBMap(ak: string) {
+  return new Promise(function (resolve, reject) {
+    if (typeof (window as any).BMap !== 'undefined') {
+      resolve((window as any).BMap)
+      return true
+    }
+    (window as any).onBMapCallback = function () {
+      resolve((window as any).BMap)
+    }
+    let script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src =
+      'http://api.map.baidu.com/api?v=3.0&ak=' + ak + '&callback=onBMapCallback'
+    script.onerror = reject
+    document.head.appendChild(script)
   })
 }
+
+
+function loadMarkerCLusterPlugin1() {
+  return new Promise<any>(function (resolve, reject) {
+    import('./TextIconOverlay_min').then(res => {
+      resolve((window as any).BMapLib)
+    })
+    // (window as any).onMarkerPluginCallback = function () {
+    //   console.debug('加载了吗')
+    //   resolve(true);
+    // }
+    // let script = document.createElement('script')
+    // script.type = 'text/javascript'
+    // script.src =
+    //   '//api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js?callback=onMarkerPluginCallback'
+    // script.onerror = reject
+    // document.head.appendChild(script)
+  })
+}
+
+function loadMarkerCLusterPlugin2() {
+  return new Promise(function (resolve, reject) {
+    import('./MarkerClusterer_min').then(res => {
+      resolve((window as any).BMapLib)
+    })
+    //   if (typeof (window as any).BMapLib !== 'undefined') {
+    //     resolve((window as any).BMapLib)
+    //     return true
+    //   }
+    //   (window as any).onBMapLibCallback = function () {
+    //     resolve((window as any).BMapLib)
+    //   }
+    //   let script = document.createElement('script')
+    //   script.type = 'text/javascript'
+    //   script.src =
+    //     'https://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js'
+    //   script.onerror = reject
+    //   document.head.appendChild(script)
+  })
+}
+
+let BMap: any;
+let BMapLib: any;
 
 let map: any;
 function initMap() {
   map = new BMap.Map("container");
-  var point = new BMap.Point(113.28340641039617, 23.09235684601844);
+  const point = new BMap.Point(113.28340641039617, 23.09235684601844);
   map.centerAndZoom(point, 15);
   // 启动鼠标滚轮缩放
   map.enableScrollWheelZoom(true);
@@ -31,19 +78,43 @@ function initMap() {
 }
 
 function addMarker() {
-  var point = new BMap.Point(113.28340641039617, 23.09235684601844);
-  var marker = new BMap.Marker(point);        // 创建标注    
-  marker.addEventListener("click", function(e: MouseEvent){    
+  const point = new BMap.Point(113.28340641039617, 23.09235684601844);
+  const marker = new BMap.Marker(point);        // 创建标注    
+  marker.addEventListener("click", function (e: MouseEvent) {
     console.debug(e)
-    alert("您点击了标注");    
-});  
+    alert("您点击了标注");
+  });
   map.addOverlay(marker);
 }
 
+const addMarkerCLuster = () => {
+  console.debug(BMapLib)
+  const markers: any[] = [];
+  city.forEach(item => {
+    const point = new BMap.Point(Math.random() * 40 + 85, Math.random() * 30 + 21);
+    const marker = new BMap.Marker(point);
+    markers.push(marker)
+  })
+  var markerClusterer = new BMapLib.MarkerClusterer(map, { markers: markers });
+  console.debug(markerClusterer)
+}
 onMounted(async () => {
-  await loadScript();
-  initMap();
-  addMarker();
+  try {
+    BMap = await loadBMap('qcxokzuhl8hvUbQuEfjQeqlBMF0dN9qm');
+    initMap();
+    addMarker();
+    const BMapLib1 = await loadMarkerCLusterPlugin1();
+    console.debug(BMapLib1)
+    BMapLib = await loadMarkerCLusterPlugin2();
+    BMapLib = {...BMapLib1, ...BMapLib}
+    console.debug(BMapLib)
+    addMarkerCLuster();
+    // const res = await import('./index.js')
+    // console.debug(res)
+  } catch (e) {
+    console.error(e);
+  }
+
 })
 
 </script>

@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue'
 
 import AMapLoader from '@amap/amap-jsapi-loader';
-import { city } from './city'
+import { city } from '@/utils/map/city'
 
 const AMap = ref<any>({});
 const map = ref<any>({});
