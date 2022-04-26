@@ -22,4 +22,9 @@ a {
 	color: #000;	/* 去除默认的颜色和点击后变化的颜色 */ 
 }
 
+.container {
+  height: 100%;
+  background: #ffffff;
+}
+
 </style>
