@@ -19,7 +19,8 @@ const initMap = async () => {
     map.value = new AMap.value.Map('container', {
       viewMode: '2D', // 默认使用 2D 模式，如果希望使用带有俯仰角的 3D 模式，请设置 viewMode: '3D',
       zoom: 4, //初始化地图层级
-      center: [113.27696169556907, 23.08601863681046] //初始化地图中心点
+      center: [113.27696169556907, 23.08601863681046], //初始化地图中心点
+      mapStyle: 'amap://styles/dark',
     });
   } catch (e) {
     console.error(e);
@@ -106,11 +107,11 @@ const addPointCluster = () => {
       var offset = new AMap.value.Pixel(-9, -9);
       context.marker.setContent(content)
       context.marker.setOffset(offset)
-      console.debug(context.marker)
     }
     const cluster = new AMap.value.MarkerClusterer(
       map.value,     // 地图实例
-      city, // 海量点数据，数据中需包含经纬度信息字段 lnglat
+      // 这里使用JSON是因为，其他页面使用这个数据，这里因为时es，引用类型，改变了数据结构，导致其他页面报错
+      JSON.parse(JSON.stringify(city)), // 海量点数据，数据中需包含经纬度信息字段 lnglat
       {
         gridSize: 80,
         renderClusterMarker: _renderClusterMarker, // 自定义聚合点样式

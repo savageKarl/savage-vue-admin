@@ -22,6 +22,12 @@ a {
 	color: #000;	/* 去除默认的颜色和点击后变化的颜色 */ 
 }
 
+#container {
+  width: 100%;
+  height: 100%;
+}
+
+
 .container {
   height: 100%;
   background: #ffffff;

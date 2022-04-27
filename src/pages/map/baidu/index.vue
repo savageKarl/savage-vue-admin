@@ -88,6 +88,7 @@ function addMarker() {
 }
 
 const addMarkerCLuster = () => {
+  // 使用本地文件，添加聚合点报错，在index.html引入链接，可以显示聚合点，但是三千数据点就卡顿严重
   console.debug(BMapLib)
   const markers: any[] = [];
   city.forEach(item => {
@@ -108,7 +109,7 @@ onMounted(async () => {
     BMapLib = await loadMarkerCLusterPlugin2();
     BMapLib = {...BMapLib1, ...BMapLib}
     console.debug(BMapLib)
-    addMarkerCLuster();
+    // addMarkerCLuster();
     // const res = await import('./index.js')
     // console.debug(res)
   } catch (e) {
