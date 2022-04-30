@@ -8,7 +8,7 @@ declare module '*.vue' {
 declare const BMap: any;
 
 declare module '@mapbox/mapbox-gl-language' {
-  class MapboxLanguage{
-    constructor(){}
+  export default class MapboxLanguage {
+    constructor(arg: any){}
   }
 }

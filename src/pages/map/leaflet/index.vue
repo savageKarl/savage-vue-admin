@@ -17,8 +17,8 @@ import "leaflet.markercluster";
 
 let map: Map;
 
-// const OSMUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const OSMUrl = 'http://wprd04.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}'; // 高德图层，使用时需要将坐标转为gcj02
+const OSMUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+// const OSMUrl = 'http://wprd04.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}'; // 高德图层，使用时需要将坐标转为gcj02
 
 const addMarkers = (icon: Icon) => {
   const markders = city.map(item => {
@@ -61,11 +61,11 @@ const addMarkerCluster = (icon: Icon) => {
 
 onMounted(() => {
   map = createMap('container', {
-    // crs: L.CRS.EPSG4326,
+    crs: L.CRS.EPSG3395,
     preferCanvas: true,
     minZoom: 3,
   });
-  map.setView([23.089228527727386, 113.27508121375594], 20);
+  map.setView([23.129, 113.2643], 20);
   createTileLayer(map, OSMUrl, { maxZoom: 19 });
   // 使用 chinaProvider 插件可以直接使用改插件封装好的图层
   // (L.tileLayer as any).chinaProvider('GaoDe.Normal.Map',{maxZoom:18,minZoom:5}).addTo(map);
@@ -81,7 +81,7 @@ onMounted(() => {
     popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
 
   })
-  addMarker(map, [23.089228527727386, 113.27508121375594], { icon: customIcon });
+  addMarker(map, [23.129, 113.2643], { icon: customIcon });
   // addMarkers(customIcon); // 添加三千多个点后，移动卡顿严重
   // addCircles();
   addMarkerCluster(customIcon);
