@@ -14,7 +14,8 @@ export const map: RouteRecordRaw[] = [
         name: 'baidu',
         component: () => import("@/pages/map/baidu/index.vue"),
         meta: {
-          title: '百度地图'
+          title: '百度地图',
+          keepAlive: false,
         }
       },
       {

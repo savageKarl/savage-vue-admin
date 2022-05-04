@@ -49,7 +49,6 @@ function closeTab(index: number) {
 }
 
 function closeOtherTab(route: RouteLocationNormalizedLoaded) {
-  console.debug('关闭其他')
   tabList.splice(0, tabList.length);
   tabList.push(route);
   router.push(route.fullPath)
@@ -61,7 +60,6 @@ function closeAllTab() {
 }
 
 function closeLeftTab(index: number) {
-  // router.push(tabList[index].fullPath);
   const leftSideTags = tabList.splice(0, index);
   if (leftSideTags.some(item => isCurrentTab(item))) {
     router.push(tabList[0].fullPath);
@@ -82,12 +80,10 @@ interface CurrentActionTabType {
 
 const currentActionTab = reactive({} as CurrentActionTabType);
 
-
 const isShowContextMenu = ref(false);
 const contextMenuPosition = reactive({ top: 0, left: 0 });
 const contextMenuStyle = computed(() => `top: ${contextMenuPosition.top}px;
     left: ${contextMenuPosition.left}px`);
-
 
 function openContextMenu(tab: RouteLocationNormalizedLoaded, index: number, e: MouseEvent) {
   isShowContextMenu.value = true;
@@ -144,7 +140,7 @@ const contextList = reactive([
 
 <template>
   <div class="tabBar">
-    <div class="tabBarList">
+    <transition-group name="tabBarList" tag="p" class="demo">
       <div class="tabBarList_item" :class="{ 'tabBarList_item-active': isCurrentTab(item) }"
         v-for="(item, index) in tabList" :key="index" @contextmenu.prevent="openContextMenu(item, index, $event)">
         <router-link :to="item.fullPath" class="tabName">{{ item.meta.title }}</router-link>
@@ -152,12 +148,12 @@ const contextList = reactive([
           <close />
         </el-icon>
       </div>
-    </div>
+    </transition-group>
     <div class="tabBarAction"></div>
     <div class="contextMenu" v-if="isShowContextMenu" :style="contextMenuStyle">
-
-      <div class="contextMenu_item" v-for="item in contextList" :key="item.name" @click="item.fn">{{ item.name }}</div>
-
+      <div class="contextMenu_item" v-for="item in contextList" :key="item.name" @click="item.fn">
+        {{ item.name }}
+      </div>
     </div>
   </div>
 </template>
@@ -188,7 +184,7 @@ const contextList = reactive([
     color: #495060;
     padding: 2px 8px;
     border-radius: 3px;
-
+    display: inline-block;
 
     .tabName {
       margin-right: 5px;
@@ -233,6 +229,7 @@ const contextList = reactive([
   font-weight: 400;
   color: #333;
   box-shadow: 2px 2px 3px 0 #00000030;
+  z-index: 999;
 
   &_item {
     margin: 0;
@@ -243,5 +240,17 @@ const contextList = reactive([
       background: #eee;
     }
   }
+}
+
+.tabBarList_item {
+  transition: all 0.8s ease;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.tabBarList-enter-from,
+.tabBarList-leave-to {
+  opacity: 0;
+  transform: translate(0, 10px);
 }
 </style>

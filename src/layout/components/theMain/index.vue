@@ -5,9 +5,13 @@
 <template>
   <el-main>
     <el-scrollbar>
+      {{$route.meta.keepAlive ?? true}}
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
-          <component :is="Component" />
+          <keep-alive v-if="$route.meta.keepAlive ?? true">
+            <component :is="Component" />
+          </keep-alive>
+          <component :is="Component" v-else />
         </transition>
       </router-view>
     </el-scrollbar>

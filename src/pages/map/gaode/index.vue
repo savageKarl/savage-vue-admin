@@ -127,6 +127,7 @@ const addPointCluster = () => {
 }
 
 onMounted(async () => {
+  console.debug('高德onmounted')
   await initMap();
   addCenterMarker();
   // addMassiveMarkder();

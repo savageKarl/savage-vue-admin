@@ -12,6 +12,10 @@ export const router = createRouter({
   routes: routes,
 });
 
+router.onError((e, to, from ) => {
+  console.debug(e, to, from)
+})
+
 setupRouterGuard(router);
 
 export default function setupRouter(app: App): void {
