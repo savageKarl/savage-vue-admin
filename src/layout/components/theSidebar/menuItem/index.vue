@@ -17,7 +17,7 @@ defineProps<{
 
 
 <template>
-  <template v-if="!item.children">
+  <template v-if="!item.children || item.children.length === 0">
     <el-menu-item :index="item.path">
       <el-icon>
         <location />

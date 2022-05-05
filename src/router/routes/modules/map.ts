@@ -15,7 +15,7 @@ export const map: RouteRecordRaw[] = [
         component: () => import("@/pages/map/baidu/index.vue"),
         meta: {
           title: '百度地图',
-          keepAlive: false,
+          keepAlive: true,
         }
       },
       {
@@ -23,7 +23,8 @@ export const map: RouteRecordRaw[] = [
         name: 'gaode',
         component: () => import("@/pages/map/gaode/index.vue"),
         meta: {
-          title: '高德地图'
+          title: '高德地图',
+          keepAlive: true,
         }
       },
       {
@@ -31,7 +32,8 @@ export const map: RouteRecordRaw[] = [
         name: 'leaflet',
         component: () => import("@/pages/map/leaflet/index.vue"),
         meta: {
-          title: 'leaflet地图'
+          title: 'leaflet地图',
+          keepAlive: true,
         }
       },
       {
@@ -39,7 +41,8 @@ export const map: RouteRecordRaw[] = [
         name: 'mapBox',
         component: () => import("@/pages/map/mapBox/index.vue"),
         meta: {
-          title: 'mapBox地图'
+          title: 'mapBox地图',
+          keepAlive: true,
         }
       },
     ]

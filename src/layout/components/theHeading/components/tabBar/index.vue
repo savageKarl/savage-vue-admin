@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { reactive, watch, watchEffect, onMounted, computed, ref, onUnmounted } from 'vue'
+import { reactive, watch, watchEffect, onMounted, computed, ref, onUnmounted } from 'vue';
 
-import { useRoute, onBeforeRouteLeave } from 'vue-router'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import { useRoute, onBeforeRouteLeave } from 'vue-router';
+import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
-import { Close } from '@element-plus/icons-vue'
+import { Close } from '@element-plus/icons-vue';
 import { router } from '@/router';
-import { table } from 'console';
 
 /*
 检测路由跳转，记录路由变量，存进一个列表里面，视图循环展示即可。存入列表需要需要去重，
@@ -19,19 +18,18 @@ const currentRoute = useRoute();
 onMounted(() => addTab(currentRoute));
 onBeforeRouteLeave((to) => addTab(to));
 
-function addTab(route: RouteLocationNormalizedLoaded) {
+function addTab(route: RouteLocationNormalizedLoaded): void {
   if (tabList.some(item => item.fullPath === route.fullPath)) return;
   tabList.push({ ...route })
   // tabList.push(route) // 这样子直接推入会有bug，不知道为什么，上面那样子写就不会
 }
 
-function isCurrentTab(route: RouteLocationNormalizedLoaded) {
+function isCurrentTab(route: RouteLocationNormalizedLoaded): boolean {
   if (route.fullPath === currentRoute.fullPath) return true;
   return false;
 }
 
-
-function closeTab(index: number) {
+function closeTab(index: number): void {
   // 逻辑思路，关闭当前标签，直接从数组删除即可
   // 如果关闭当前时当前激活标签，判断关闭标签后面是否有标签，有就激活后面的标签
   // 如果后面没有标签就拿前面的，如果后面和前面都没有，那么就是最后一个了，关闭了重定向到首页
@@ -48,25 +46,25 @@ function closeTab(index: number) {
   tabList.splice(index, 1);
 }
 
-function closeOtherTab(route: RouteLocationNormalizedLoaded) {
+function closeOtherTab(route: RouteLocationNormalizedLoaded): void {
   tabList.splice(0, tabList.length);
   tabList.push(route);
   router.push(route.fullPath)
 }
 
-function closeAllTab() {
+function closeAllTab(): void {
   tabList.splice(0)
   router.push('/');
 }
 
-function closeLeftTab(index: number) {
+function closeLeftTab(index: number): void {
   const leftSideTags = tabList.splice(0, index);
   if (leftSideTags.some(item => isCurrentTab(item))) {
     router.push(tabList[0].fullPath);
   }
 }
 
-function closeRightTab(index: number) {
+function closeRightTab(index: number): void {
   const rightSideTags = tabList.splice(index + 1);
   if (rightSideTags.some(item => isCurrentTab(item))) {
     router.push(tabList[tabList.length - 1].fullPath);
@@ -85,7 +83,7 @@ const contextMenuPosition = reactive({ top: 0, left: 0 });
 const contextMenuStyle = computed(() => `top: ${contextMenuPosition.top}px;
     left: ${contextMenuPosition.left}px`);
 
-function openContextMenu(tab: RouteLocationNormalizedLoaded, index: number, e: MouseEvent) {
+function openContextMenu(tab: RouteLocationNormalizedLoaded, index: number, e: MouseEvent): void {
   isShowContextMenu.value = true;
   currentActionTab.tab = tab;
   currentActionTab.index = index;
@@ -93,7 +91,7 @@ function openContextMenu(tab: RouteLocationNormalizedLoaded, index: number, e: M
   contextMenuPosition.top = e.clientY;
 }
 
-function closeContextMenu() {
+function closeContextMenu(): void {
   isShowContextMenu.value = false;
 }
 
@@ -108,7 +106,7 @@ watch(
   }
 )
 
-const contextList = reactive([
+const contextMenuList = reactive([
   {
     name: '刷新',
     fn: () => alert('以后再实现'),
@@ -140,7 +138,7 @@ const contextList = reactive([
 
 <template>
   <div class="tabBar">
-    <transition-group name="tabBarList" tag="p" class="demo">
+    <transition-group name="tabBarList" tag="div" class="tabBarList">
       <div class="tabBarList_item" :class="{ 'tabBarList_item-active': isCurrentTab(item) }"
         v-for="(item, index) in tabList" :key="index" @contextmenu.prevent="openContextMenu(item, index, $event)">
         <router-link :to="item.fullPath" class="tabName">{{ item.meta.title }}</router-link>
@@ -151,7 +149,7 @@ const contextList = reactive([
     </transition-group>
     <div class="tabBarAction"></div>
     <div class="contextMenu" v-if="isShowContextMenu" :style="contextMenuStyle">
-      <div class="contextMenu_item" v-for="item in contextList" :key="item.name" @click="item.fn">
+      <div class="contextMenu_item" v-for="item in contextMenuList" :key="item.name" @click="item.fn">
         {{ item.name }}
       </div>
     </div>

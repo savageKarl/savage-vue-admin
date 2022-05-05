@@ -1,3 +1,8 @@
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({ name: 'baidu' });
+</script>
+
 
 <script setup lang="ts">
 import { onMounted } from 'vue';

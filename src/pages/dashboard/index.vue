@@ -1,5 +1,10 @@
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({ name: 'dashboard' });
+</script>
+
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onActivated } from 'vue';
 
 
 // 引入 echarts 核心模块，核心模块提供了 echarts 使用必须要的接口。
@@ -80,13 +85,19 @@ onMounted(() => {
   const myEchart = echarts.init(container.value as HTMLElement)
   myEchart.setOption(option)
 })
+onActivated(() => {
+  console.debug('onActivated')
+})
 </script>
 <template>
   <div>
     <h1>dashboard</h1>
-    <div id="container" ref="container">
-
-    </div>
+    <div id="container" ref="container"></div>
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 

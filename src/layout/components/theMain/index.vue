@@ -1,17 +1,18 @@
 <script setup lang="ts">
-
+import { useRouter } from 'vue-router'
+const router = useRouter();
+const cahcheRouteName = router.getRoutes().filter(item => item.meta.keepAlive)
+  .map(item => item.name) as string[];
 </script>
 
 <template>
   <el-main>
     <el-scrollbar>
-      {{$route.meta.keepAlive ?? true}}
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
-          <keep-alive v-if="$route.meta.keepAlive ?? true">
+          <keep-alive :include="cahcheRouteName">
             <component :is="Component" />
           </keep-alive>
-          <component :is="Component" v-else />
         </transition>
       </router-view>
     </el-scrollbar>

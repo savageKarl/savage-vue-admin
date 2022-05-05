@@ -1,3 +1,8 @@
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({ name: 'gaode' });
+</script>
+
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'

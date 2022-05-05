@@ -1,4 +1,7 @@
-
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({ name: 'leaflet' });
+</script>
 <script setup lang="ts">
 
 import { ref, onMounted } from 'vue'

@@ -13,7 +13,7 @@ export const router = createRouter({
 });
 
 router.onError((e, to, from ) => {
-  console.debug(e, to, from)
+  console.error(e, to, from)
 })
 
 setupRouterGuard(router);

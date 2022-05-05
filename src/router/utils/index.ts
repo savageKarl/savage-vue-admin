@@ -5,50 +5,75 @@ import { useMenuRouteStore } from "@/store/modules/menuRoute";
 import { useUserStore } from "@/store/modules/user";
 
 // 在这里根据用户角色初始化路由
-export function initRoutes() {
+export function initRoutes(): void {
   const allRoutes = routes;
   const userStore = useUserStore();
   const accessibleRoutes = filterRoutesByRole(allRoutes, userStore.roles);
-
-  const notHiddenMenuRoutes = getNotHiddenMenuRoutes(accessibleRoutes);
-
+  const menuRoutes = getMenuRoutes(accessibleRoutes);
+  console.debug('menuRoutes', menuRoutes);
+  const notHiddenMenuRoutes = getNotHiddenMenuRoutes(menuRoutes);
+  console.debug('notHiddenMenuRoutes', notHiddenMenuRoutes)
   const routeStore = useMenuRouteStore();
   routeStore.setMenuRoutes(notHiddenMenuRoutes);
+  // routeStore.setMenuRoutes(routes);
 
+  // 这里清除路由是因为启动的时候会默认加载所有路由
   clearRoutes();
   injectRoutes(getCanInjectRoutes(accessibleRoutes));
 }
 
 /** 获取可注入的路由 */
-export function getCanInjectRoutes(routes: RouteRecordRaw[]) {
+export function getCanInjectRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
   const menuRoutes = getMenuRoutes(routes);
+  console.debug('menuRoutes', menuRoutes);
   const falttendMenuRoutes = flattenMenuRoutes(menuRoutes);
   const layoutMenuRoutes = addLayoutToMenuRoute(falttendMenuRoutes);
   const notMenuRoutes = getNotMenuRoutes(routes);
+  console.debug('notMenuRoutes', notMenuRoutes)
   // 注意：这里要注意路由顺序，非路由菜单的路由必须在前才能正常重定向后面的菜单路由
   return [...notMenuRoutes, ...layoutMenuRoutes];
 }
+ 
+/** 获取菜单路由, 这里递归是因为需要判断深层次的路由不一定是菜单路由 */
+export function getMenuRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
+  const menuRoutes: RouteRecordRaw[] = [];
+  routes.forEach((item, index) => {
+    // 这里使用结构是因为后面对这item进行了赋值修改，因为参数的引用类型，会导致参数的数据结构改变
+    if (item.meta?.isMenuRoute ?? true) {
+      menuRoutes.push({...item});
+      if (item.children) {
+        menuRoutes[menuRoutes.length- 1].children = getMenuRoutes(item.children);
+      }
+    }
+  });
+  return menuRoutes;
 
-/** 获取菜单路由 */
-export function getMenuRoutes(routes: RouteRecordRaw[]) {
   return routes.filter((item) => item.meta?.isMenuRoute ?? true);
 }
 
 /** 获取非菜单路由 */
-export function getNotMenuRoutes(routes: RouteRecordRaw[]) {
+export function getNotMenuRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
+  const notMenuRoutes: RouteRecordRaw[] = [];
+  routes.forEach(item => {
+    if (item.meta?.isMenuRoute === false) {
+      notMenuRoutes.push(item);
+    }
+    if ((item.meta?.isMenuRoute ?? true) && item.children && item.children.length > 0) {
+      notMenuRoutes.push(...getNotMenuRoutes(item.children));
+    }
+  })
+  return notMenuRoutes;
   return routes.filter((item) => item.meta?.isMenuRoute === false);
 }
 
-/** 获取非隐藏菜单的菜单路由 */
-export function getNotHiddenMenuRoutes(routes: RouteRecordRaw[]) {
-  return routes.filter(
-    (item) =>
-      (item.meta?.isMenuRoute ?? true) && !(item.meta?.isHidden ?? false)
-  );
+/** 获取非隐藏菜单的菜单路由，用于生菜侧边栏菜单 */
+export function getNotHiddenMenuRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
+  // 这里还需要注意子菜单的隐藏情况，todo
+  return routes.filter((item) =>!(item.meta?.isHidden ?? false));
 }
 
 /** 给菜单路由添加layout组件 */
-export function addLayoutToMenuRoute(routes: RouteRecordRaw[]) {
+export function addLayoutToMenuRoute(routes: RouteRecordRaw[]): RouteRecordRaw[] {
   return routes.map((item, index) => {
     return {
       path: "/",
@@ -59,28 +84,29 @@ export function addLayoutToMenuRoute(routes: RouteRecordRaw[]) {
   });
 }
 
-/** 将嵌套路由处理成一维数组，扁平化菜单路由结构*/
-export function flattenMenuRoutes(routes: RouteRecordRaw[]) {
+/** 将嵌套路由处理成一维数组，扁平化菜单路由结构，why？因为只有具体的菜单页面才需要layout布局。 */
+export function flattenMenuRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
   const flattendRoutes: RouteRecordRaw[] = [];
   routes.forEach((item) => {
-    if (!item.children) flattendRoutes.push(item);
+    if (!item.children || item.children.length === 0) flattendRoutes.push(item);
     else flattendRoutes.push(...flattenMenuRoutes(item.children));
   });
   return flattendRoutes;
 }
 
 /** 注入路由 */
-export function injectRoutes(routes: RouteRecordRaw[]) {
+export function injectRoutes(routes: RouteRecordRaw[]): void {
+  console.debug('injectRoutes', routes)
   routes.forEach((item) => router.addRoute(item));
 }
 
 /** 清空路由 */
-export function clearRoutes() {
+export function clearRoutes(): void  {
   router.getRoutes().forEach((item) => router.removeRoute(item.name as any));
 }
 
 /** 根据用户权限过滤路由 */
-export function filterRoutesByRole(routes: RouteRecordRaw[], roles: string[]) {
+export function filterRoutesByRole(routes: RouteRecordRaw[], roles: string[]): RouteRecordRaw[] {
   const filteredRoutes: RouteRecordRaw[] = [];
   routes.forEach((item) => {
     // 路由没设置meta或者roles为空数组，表示该路由不做权限控制
