@@ -10,12 +10,9 @@ export function initRoutes(): void {
   const userStore = useUserStore();
   const accessibleRoutes = filterRoutesByRole(allRoutes, userStore.roles);
   const menuRoutes = getMenuRoutes(accessibleRoutes);
-  console.debug('menuRoutes', menuRoutes);
   const notHiddenMenuRoutes = getNotHiddenMenuRoutes(menuRoutes);
-  console.debug('notHiddenMenuRoutes', notHiddenMenuRoutes)
   const routeStore = useMenuRouteStore();
   routeStore.setMenuRoutes(notHiddenMenuRoutes);
-  // routeStore.setMenuRoutes(routes);
 
   // 这里清除路由是因为启动的时候会默认加载所有路由
   clearRoutes();
@@ -25,44 +22,20 @@ export function initRoutes(): void {
 /** 获取可注入的路由 */
 export function getCanInjectRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
   const menuRoutes = getMenuRoutes(routes);
-  console.debug('menuRoutes', menuRoutes);
   const falttendMenuRoutes = flattenMenuRoutes(menuRoutes);
   const layoutMenuRoutes = addLayoutToMenuRoute(falttendMenuRoutes);
   const notMenuRoutes = getNotMenuRoutes(routes);
-  console.debug('notMenuRoutes', notMenuRoutes)
   // 注意：这里要注意路由顺序，非路由菜单的路由必须在前才能正常重定向后面的菜单路由
   return [...notMenuRoutes, ...layoutMenuRoutes];
 }
  
-/** 获取菜单路由, 这里递归是因为需要判断深层次的路由不一定是菜单路由 */
+/** 获取菜单路由 */
 export function getMenuRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
-  const menuRoutes: RouteRecordRaw[] = [];
-  routes.forEach((item, index) => {
-    // 这里使用结构是因为后面对这item进行了赋值修改，因为参数的引用类型，会导致参数的数据结构改变
-    if (item.meta?.isMenuRoute ?? true) {
-      menuRoutes.push({...item});
-      if (item.children) {
-        menuRoutes[menuRoutes.length- 1].children = getMenuRoutes(item.children);
-      }
-    }
-  });
-  return menuRoutes;
-
   return routes.filter((item) => item.meta?.isMenuRoute ?? true);
 }
 
 /** 获取非菜单路由 */
 export function getNotMenuRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
-  const notMenuRoutes: RouteRecordRaw[] = [];
-  routes.forEach(item => {
-    if (item.meta?.isMenuRoute === false) {
-      notMenuRoutes.push(item);
-    }
-    if ((item.meta?.isMenuRoute ?? true) && item.children && item.children.length > 0) {
-      notMenuRoutes.push(...getNotMenuRoutes(item.children));
-    }
-  })
-  return notMenuRoutes;
   return routes.filter((item) => item.meta?.isMenuRoute === false);
 }
 

@@ -25,16 +25,5 @@ export const dashboard: RouteRecordRaw[] = [
       title: "仪表盘",
       keepAlive: true,
     },
-    children: [
-      {
-        path: '/test',
-        name: 'test',
-        component: () => import('@/pages/dashboard/test/index.vue'),
-        meta: {
-          title: '测试嵌套非路由页面',
-          isMenuRoute: false,
-        }
-      }
-    ]
   },
 ];
