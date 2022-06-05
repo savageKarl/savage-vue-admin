@@ -10,12 +10,9 @@ export function initRoutes(): void {
   const userStore = useUserStore();
   const accessibleRoutes = filterRoutesByRole(allRoutes, userStore.roles);
   const menuRoutes = getMenuRoutes(accessibleRoutes);
-  console.debug('menuRoutes', menuRoutes);
   const notHiddenMenuRoutes = getNotHiddenMenuRoutes(menuRoutes);
-  console.debug('notHiddenMenuRoutes', notHiddenMenuRoutes)
   const routeStore = useMenuRouteStore();
   routeStore.setMenuRoutes(notHiddenMenuRoutes);
-  // routeStore.setMenuRoutes(routes);
 
   // 这里清除路由是因为启动的时候会默认加载所有路由
   clearRoutes();
