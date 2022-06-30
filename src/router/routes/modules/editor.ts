@@ -13,7 +13,7 @@ export const editor: RouteRecordRaw[] = [
       {
         path: "/editor/markdown",
         name: "markdown",
-        component: () => import("@/pages/editor/markdown/index.vue"),
+        component: () => import("@/pages/editor/markdown/markdown.vue"),
         meta: {
           title: "md编辑器",
         },
@@ -21,7 +21,7 @@ export const editor: RouteRecordRaw[] = [
       {
         path: "/editor/richText",
         name: "richText",
-        component: () => import("@/pages/editor/richText/index.vue"),
+        component: () => import("@/pages/editor/richText/richText.vue"),
         meta: {
           title: "富文本编辑器",
         },

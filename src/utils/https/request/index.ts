@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { setupInterceptor } from '@/utils/https/interceptors/index';
 

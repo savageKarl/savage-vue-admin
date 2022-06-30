@@ -13,7 +13,7 @@ export const error: RouteRecordRaw[] = [
       {
         path: "/error/401",
         name: "401",
-        component: () => import("@/pages/errorPage/401/index.vue"),
+        component: () => import("@/pages/errorPage/401/401.vue"),
         meta: {
           title: "401",
           roles: ["admin", "editor"],
@@ -22,7 +22,7 @@ export const error: RouteRecordRaw[] = [
       {
         path: "/error/403",
         name: "403",
-        component: () => import("@/pages/errorPage/403/index.vue"),
+        component: () => import("@/pages/errorPage/403/403.vue"),
         meta: {
           title: "403",
           roles: ["admin", "editor"],
@@ -33,7 +33,7 @@ export const error: RouteRecordRaw[] = [
   {
     path: "/404",
     name: "404",
-    component: () => import("@/pages/errorPage/404/index.vue"),
+    component: () => import("@/pages/errorPage/404/404.vue"),
     meta: {
       isMenuRoute: false,
     },

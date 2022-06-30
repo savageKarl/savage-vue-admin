@@ -5,7 +5,7 @@ export default defineComponent({ name: 'dashboard' });
 
 <script setup lang="ts">
 import { ref, onMounted, onActivated } from 'vue';
-
+import {test} from '@/api/demo'
 
 // 引入 echarts 核心模块，核心模块提供了 echarts 使用必须要的接口。
 import * as echarts from 'echarts/core';
@@ -61,7 +61,9 @@ echarts.use([
   UniversalTransition,
   CanvasRenderer
 ]);
-
+console.debug(test().then(res => {
+  console.debug(res)
+}))
 const option: ECOption = {
   title: {
     text: 'ECharts 入门示例'

@@ -20,7 +20,7 @@ export const dashboard: RouteRecordRaw[] = [
   {
     path: "/dashboard",
     name: "dashboard",
-    component: () => import("@/pages/dashboard/index.vue"),
+    component: () => import("@/pages/dashboard/dashboard.vue"),
     meta: {
       title: "仪表盘",
       keepAlive: true,
