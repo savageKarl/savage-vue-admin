@@ -8,6 +8,6 @@ const pinia = createPinia();
 
 setupPersist(pinia);
 
-export default function setupPinia(app: App) {
+export default function setupPinia(app: App): void {
   app.use(pinia);
 }

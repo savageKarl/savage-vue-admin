@@ -1,95 +1,37 @@
-# savage_admin
+# vue_savage_admin
 
-从0到1搭建一个完善的中后台管理系统
+
 
 ## 简介
 
-一个中后台管理系统的解决方案，基于Vue3、Pinia、Typescript、Element-Plus 和 Vue-cli@4.x，在动态路由生成侧边栏菜单和路由注入等核心功能跟市面上的开源项目不一样，这里有自己特别的思考和处理方式。
-
-## 功能
-- 用户登录
-    - 登录
-    - 注销
-
-- 权限控制
-    - 基于角色的访问控制，对页面进行鉴权
-    - 指定权限，对页面的功能进行鉴权
-
-- 环境
-    - development
-    - production
-
-- 全局功能
-    - 动态路由生成侧边栏菜单
-    - 动态标签页
-    - 自适应收缩侧边栏
-    - 全屏
-    - 用户指引
-
-- 编辑器
-    - 富文本
-    - Markdown
-    - JSON
-
-- 地图
-    - 百度地图
-    - 高低地图
-    - leaflet
-    - mapbox-gl
-
-- 错误页面
-    - 403
-    - 404
-
-## 目录结构
+一个中后台管理系统的基础框架，基于Vue3、Pinia、Typescript、Element-Plus 和 Vue-cli@4.x，在动态路由生成侧边栏菜单和路由注入等核心功能跟市面上的开源项目不一样，这里有自己特别的思考和处理方式。
 
 
-## 开发规范
+## 安装与运行
 
-## 运行
+```
+git clone https://github.com/savage181855/vue-savage-admin.git
 
+yarn install
 
+yarn dev
+```
 
-## 菜单和路由
+## 项目结构
 
-一般的处理时，菜单和路由分别写，这样子每次修改过于繁琐，市面上的开源项目处理方式，通过路由生成菜单，一级路由都会要写一个layout组件，所以会出现，二级菜单里面只有一个子菜单项，需要另外的处理只有一个子菜单项就替代一级菜单显示，不优雅。
-
-
-我的思路
-
-```typescript
-  {
-    path: "/dashboard",
-    name: "dashboard",
-    component: () => import("@/pages/dashboard/index.vue"),
-    meta: {
-      title: "仪表盘", // 页面的菜单的名字
-      roles: ['admin'], // 该路由需要的权限
-      isMenuRoute: true, // 默认为 true，说明：该页面是否侧边栏菜单页面，是否在菜单里面
-      isHidden: false, // 默认为 false， 说明：该菜单页面是否隐藏，只有 isMenuRoute 为 true才有效果
-      keepAlive: false, // 默认为 true，是否缓存路由，
-  },
-  ```
-
-因为菜单的layout是动态添加的，所以需要处理所有的路由。在目录划分上不需要划分出静态路由和动态路由。
-
-在项目启动的时候，会加载路由，为了保持首次打开或者刷新的正常路由跳转，然后在初始化路由的时候，清空路由，再注入所有鉴权后的路由，然后重定向到默认路由。
-
-清空路由时因为首次访问注加载了所有路由，为了防止没有权限的用户访问页面，需要清空路由，再注入鉴权后的路由。
-
-在处理菜单的时候，有以下思路：
-- 先根据用户权限过滤路由
-- 根据 isMenuRoute 和 isHidden 过滤出非隐藏菜单路由，保持原有的数据结构，用于递归生成菜单
-- 根据 isMenuRoute 过滤出菜单路由和非菜单路由，将菜单路由扁平化处理，然后添加layout组件
-- 清空路由，将菜单路由和非菜单路由注入路由
-
-
-### 路由鉴权
-
-路由记录没有设置 `meta` 或 `meta.roles` 或 `meta.roles是空数组`的，表示该路由不需要权限控制。
-
-否则，遍历用户roles，然后判断路由记录的`meta.roles`是否包含`role`，包含就表示有权限。
-
-### 标签栏
-
-布局，左侧
+```
+docs                  文档
+src                   源码
+  api                 api集中管理
+  assets              静态资源
+  components          全局组件
+  constant            项目常量
+  directives          全局指令
+  layout              页面布局，单独抽离，灵活易用，降低耦合度
+  pages               页面
+  router              路由器和路有记录，这里会进行路由鉴权和注入路由
+  utils               工具库，封装的基础请求api和工具函数
+  .env                全局配置文件，项目的配置项全部在这里写，例如请求URL和标题
+  .env.development    开发环境全局配置文件，相同项会覆盖 .env
+  .env.production     生产环境全局配置文件，相同项会覆盖 .env
+```
