@@ -9,14 +9,6 @@ export const dashboard: RouteRecordRaw[] = [
       isMenuRoute: false,
     },
   },
-  // {
-  //   path: "/:pathMatch(.*)*",
-  //   name: "not-found",
-  //   redirect: "/about",
-  //   meta: {
-  //     isMenuRoute: false,
-  //   },
-  // },
   {
     path: "/dashboard",
     name: "dashboard",
